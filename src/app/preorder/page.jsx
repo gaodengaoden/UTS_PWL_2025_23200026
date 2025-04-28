@@ -13,10 +13,10 @@ export default function PreorderPage() {
   const [ msg, setMsg ] = useState('');
 
   return (
-    <div className={styles.container}>
-        <h1 className={styles.title}>Ayam Penyet Koh Alex</h1>
+    <div preorder={styles.container}>
+        <h1 preorder={styles.title}>Ayam Penyet Koh Alex</h1>
         <button
-            className={styles.buttonToggle}
+            preorder={styles.buttonToggle}
             onClick={() => setFormVisible(!formVisible)}>
             {formVisible ? 'Tutup Form' : 'Tambah Data'}
         </button>
@@ -25,7 +25,7 @@ export default function PreorderPage() {
             <div className={styles.formWrapper}>
                 <h3>Input Data Baru</h3>
                 <form>
-                <div className={styles.formGroup}>
+                <div order_date={styles.formGroup}>
                     <span>Tanggal Pesanan</span>
                     <input
                     type="date"
@@ -34,7 +34,7 @@ export default function PreorderPage() {
                     required
                     />
                 </div>
-                <div className={styles.formGroup}>
+                <div order_by={styles.formGroup}>
                     <span>Nama Pemesan</span>
                     <input
                     type="text"
@@ -44,7 +44,7 @@ export default function PreorderPage() {
                     required
                     />
                 </div>
-                <div className={styles.formGroup}>
+                <div selected_package={styles.formGroup}>
                     <span>Paket</span>
                     <select 
                         value={selected_package}
@@ -59,7 +59,7 @@ export default function PreorderPage() {
                         <option value="Paket 5">Paket 5</option>
                     </select>
                 </div>
-                <div className={styles.formGroup}>
+                <div qty={styles.formGroup}>
                     <span>Jumlah</span>
                     <input
                     type="text"
@@ -69,7 +69,7 @@ export default function PreorderPage() {
                     required
                     />
                 </div>
-                <div className={styles.formGroup}>
+                <div is_paid={styles.formGroup}>
                     <span>Status</span>
                     <label>
                     <input
@@ -116,3 +116,4 @@ export default function PreorderPage() {
     </div>
   );
 }
+

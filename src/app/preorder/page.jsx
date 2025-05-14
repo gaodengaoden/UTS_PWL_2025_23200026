@@ -172,7 +172,6 @@ const handleDelete = async (id) => {
                 </tr>
                 </thead>
                 <tbody>
-                <tbody style={{ textAlign: 'center', verticalAlign: 'middle' }}> </tbody>
                     {preorders.map((item, index) => (
                         <tr key={item.id}>
                             <td>{index + 1}</td>
@@ -184,7 +183,6 @@ const handleDelete = async (id) => {
                             <td>
                                 <button onClick={() => handleEdit(item)}>Edit</button>
                                 <button onClick={() => handleDelete(item.id)}>Hapus</button>
-                                <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '10px'}}>Hapus</button>
                             </td>
                         </tr>
                     ))}

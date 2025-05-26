@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 export default function PreorderPage() {
 
     const[preorders,setPreorders] = useState([]);
+    const[pakets,setPakets] = useState([]);
 
   const [formVisible, setFormVisible] = useState(false);
   const [ order_date, setOrderDate ] = useState('');
@@ -21,8 +22,15 @@ export default function PreorderPage() {
     setPreorders(data);
   };
 
+  const fetchPakets = async () => {
+    const res = await fetch('api/paket');
+    const data = await res.json();
+    setPakets(data);
+  };
+
   useEffect(() => {
     fetchPreorders();
+    fetchPakets();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -112,11 +120,9 @@ const handleDelete = async (id) => {
                         required
                     >
                         <option value="">Pilih Paket</option>
-                        <option value="Paket 1">Paket 1</option>
-                        <option value="Paket 2">Paket 2</option>
-                        <option value="Paket 3">Paket 3</option>
-                        <option value="Paket 4">Paket 4</option>
-                        <option value="Paket 5">Paket 5</option>
+                        {pakets.map((item) => (
+                            <option key={item.id} value={item.selected_package}>{item.nama}</option>
+                        ))}
                     </select>
                 </div>
                 <div className={styles.formGroup}>
@@ -171,18 +177,18 @@ const handleDelete = async (id) => {
                     <th>Aksi</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                     {preorders.map((item, index) => (
                         <tr key={item.id}>
                             <td>{index + 1}</td>
                             <td>{item.order_date}</td>
                             <td>{item.order_by}</td>
-                            <td>{item.selectec_package}</td>
+                            <td>{item.selected_package}</td>
                             <td>{item.qty}</td>
                             <td>{item.status}</td>
                             <td>
                                 <button onClick={() => handleEdit(item)}>Edit</button>
-                                <button onClick={() => handleDelete(item.id)}>Hapus</button>
+                                <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '10px'}}>Hapus</button>
                             </td>
                         </tr>
                     ))}

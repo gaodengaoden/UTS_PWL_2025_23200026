@@ -2,24 +2,24 @@ import prisma from "@/lib/prisma";
 
 export async function PUT(request, { params }) {
     const { id } = await params;
-    const { kode, nama, deskripsi } = await request.json();
-    if (!kode || !nama || !deskripsi) {
+    const { name, phone, email } = await request.json();
+    if (!name || !phone) {
         return new Response(JSON.stringify({ error: 'Field kosong' }), { status: 400 });
     }
 
-    const paket = await prisma.paket.update({
+    const customer = await prisma.customer.update({
         where: { id: Number(id) },
-        data: { kode, nama, deskripsi },
+        data: { name, phone, email },
     });
-    return new Response(JSON.stringify(paket), { status: 200 });
+    return new Response(JSON.stringify(customer), { status: 200 });
 }
 
 export async function DELETE(request, { params }) {
     const { id } = await params;
     if (!id) return new Response(JSON.stringify({ error: "ID tidak ditemukan" }), { status: 400 });
 
-    const deletedPaket = await prisma.paket.delete({
+    const deletedCustomer = await prisma.customer.delete({
         where: { id: Number(id) },
     });
-    return new Response(JSON.stringify({ message: "Berhasil dihapus", deletedPaket }), { status: 200 });
+    return new Response(JSON.stringify({ message: "Berhasil dihapus", deletedCustomer }), { status: 200 });
 }

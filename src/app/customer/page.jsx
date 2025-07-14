@@ -1,70 +1,69 @@
 "use client";
-import styles from './PaketPage.module.css';
+import styles from './CustomerPage.module.css';
 import { useEffect, useState } from 'react';
 
-export default function PaketPage() {
+export default function CustomerPage() {
 
-    const[pakets,setPakets] = useState([]);
+    const[customers,setCustomers] = useState([]);
     const [formVisible, setFormVisible] = useState(false);
-    const [ kode, setKode ] = useState('');
-    const [ nama, setNama ] = useState('');
-    const [ deskripsi, setDeskripsi]= useState('');
+    const [ name, setName ] = useState('');
+    const [ phone, setPhone ] = useState('');
+    const [ email, setEmail ]= useState('');
     const [ msg, setMsg ] = useState('');
     const [editId, setEditId] = useState(null);
 
-    const fetchPakets = async () => {
-        const res = await fetch('api/paket');
+    const fetchCustomers = async () => {
+        const res = await fetch('api/customer');
         const data = await res.json();
-        setPakets(data);
+        setCustomers(data);
     };
 
     useEffect(() => {
-        fetchPakets();
+        fetchCustomers();
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const method = editId ? 'PUT' : 'POST';
-        const url = editId ? `/api/paket/${editId}` : '/api/paket';
+        const url = editId ? `/api/customer/${editId}` : '/api/customer';
         const res = await fetch(url, {
             method,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ kode, nama, deskripsi }),
+            body: JSON.stringify({ name, phone, email }),
         });
 
         if (res.ok) {
             setMsg('Berhasil disimpan!');
-            setKode('');
-            setNama('');
-            setDeskripsi('');
+            setName('');
+            setPhone('');
+            setEmail('');
             setEditId(null);
             setFormVisible(false);
-            fetchPakets();
+            fetchCustomers();
         } else {
             setMsg('Gagal menyimpan data');
         }
     };
 
     const handleEdit = (item) => {
-        setKode(item.kode);
-        setNama(item.nama);
-        setDeskripsi(item.deskripsi);
+        setName(item.name);
+        setPhone(item.phone);
+        setEmail(item.email);
         setEditId(item.id);
         setFormVisible(true);
     };
 
 
-
     const handleDelete = async (id) => {
         if (!confirm('Yakin hapus data ini?')) return;
 
-        await fetch(`/api/paket/${id}`, {
+        await fetch(`/api/customer/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id }),
         });
 
-        fetchPakets();
+        fetchCustomers();
     };
 
     return (
@@ -75,42 +74,40 @@ export default function PaketPage() {
                 onClick={() => setFormVisible(!formVisible)}>
                 {formVisible ? 'Tutup Form' : 'Tambah Data'}
             </button>
-            
+        
             {formVisible && (
                 <div className={styles.formWrapper}>
                     <h3>Input Data Baru</h3>
                     <form onSubmit={handleSubmit}>
                         <div className={styles.formGroup}>
-                            <span>Kode</span>
+                            <span>Nama Customer</span>
                             <input
                                 type="text"
-                                value={kode}
-                                onChange={(e) => setKode(e.target.value)}
-                                placeholder="Masukkan Kode"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 required
                             />
                         </div>
                         <div className={styles.formGroup}>
-                            <span>Nama Paket</span>
+                            <span>Nomor HP</span>
                             <input
                                 type="text"
-                                value={nama}
-                                onChange={(e) => setNama(e.target.value)}
-                                placeholder="Masukkan Nama Paket"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="Masukkan Nomor HP"
                                 required
                             />
                         </div>
                         <div className={styles.formGroup}>
-                            <span>Deskripsi</span>
-                            <textarea
-                                value={deskripsi}
-                                onChange={(e) => setDeskripsi(e.target.value)}
-                                placeholder="Masukkan Deskripsi"
-                                style={{ width: '100%', resize: 'vertical', minHeight: '100px' }}
-                                required
+                            <span>Email</span>
+                            <input
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Input Email"
                             />
                         </div>
-                        
+                    
                         <button type="submit">
                             Simpan
                         </button>
@@ -124,28 +121,30 @@ export default function PaketPage() {
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kode</th>
-                            <th>Nama Paket</th>
-                            <th>Deskripsi</th>
+                            <th>Nama Customer</th>
+                            <th>Nomor HP</th>
+                            <th>Email</th>
+                            <th>Tanggal dan Waktu Input</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                        {pakets.map((item, index) => (
+                        {customers.map((item, index) => (
                             <tr key={item.id}>
                                 <td>{index + 1}</td>
-                                <td>{item.kode}</td>
-                                <td>{item.nama}</td>
-                                <td>{item.deskripsi}</td>
+                                <td>{item.name}</td>
+                                <td>{item.phone}</td>
+                                <td>{item.email}</td>
+                                <td>{new Date(item.createdAt).toLocaleString()}</td>
                                 <td>
                                     <button onClick={() => handleEdit(item)}>Edit</button>
                                     <button onClick={() => handleDelete(item.id)} style={{ marginLeft: '10px'}}>Hapus</button>
-                                </td> 
+                                </td>
                             </tr>
                         ))}
-                        {pakets.length === 0 && (
+                        {customers.length === 0 && (
                             <tr>
-                                <td colSpan="5">Belum ada data</td>
+                                <td colSpan="6">Belum ada data</td>
                             </tr>
                         )}
                     </tbody>
@@ -153,4 +152,4 @@ export default function PaketPage() {
             </div>
         </div>
     );
-    }
+}
